@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Корзина — Hello Kitty{% endblock %}
+
+{% block content %}
+<div class="section-head">
+    <img class="head-bow" src="{% static 'img/bow.svg' %}" alt="">
+    <h1>Корзина</h1>
+    {% if items %}<span class="count">{{ cart_count }} шт.</span>{% endif %}
+</div>
+
+{% if items %}
+    <ul class="cart">
+        {% for item in items %}
+            <li class="cart-row">
+                <span class="thumb thumb-sm"><span>{{ item.product.name|first|upper }}</span></span>
+                <div class="cart-name">
+                    <strong>{{ item.product.name }}</strong>
+                    <small>{{ item.product.price|floatformat:"-2" }} ₽ за шт.</small>
+                </div>
+                <form class="stepper" method="post" action="{% url 'cart-update' item.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" name="quantity" value="{{ item.quantity|add:'-1' }}" aria-label="Меньше">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button type="submit" name="quantity" value="{{ item.quantity|add:'1' }}" aria-label="Больше" {% if item.quantity >= 99 %}disabled{% endif %}>+</button>
+                </form>
+                <span class="cart-sum">{{ item.total|floatformat:"-2" }} ₽</span>
+                <form method="post" action="{% url 'cart-remove' item.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="remove" aria-label="Удалить">✕</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <form class="total" method="post">
+        {% csrf_token %}
+        <div class="total-sum">
+            <small>Итог</small>
+            <strong>{{ total|floatformat:"-2" }} ₽</strong>
+        </div>
+        <button type="submit" class="btn btn-lg">Оформить заказ ♡</button>
+    </form>
+{% else %}
+    <div class="empty-state">
+        <img src="{% static 'img/kitty.png' %}" alt="">
+        <p>В корзине пока пусто</p>
+        <a class="btn" href="{% url 'index' %}">Перейти к товарам</a>
+    </div>
+{% endif %}
+{% endblock %}

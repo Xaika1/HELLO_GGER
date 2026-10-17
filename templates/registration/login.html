@@ -1,0 +1,21 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Вход — Hello Kitty{% endblock %}
+
+{% block content %}
+<h1>Вход</h1>
+
+<form class="auth-form" method="post">
+    {% csrf_token %}
+    <label class="form-row">
+        <span>Логин</span>
+        <input name="username" value="{{ request.POST.username }}" required autocomplete="username" autofocus>
+    </label>
+    <label class="form-row">
+        <span>Пароль</span>
+        <input name="password" type="password" required autocomplete="current-password">
+    </label>
+    <button type="submit" class="btn">Войти</button>
+</form>
+<p class="switch">Нет аккаунта? <a href="{% url 'web-signup' %}">Зарегистрироваться</a></p>
+{% endblock %}

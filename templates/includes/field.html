@@ -1,0 +1,7 @@
+<label class="form-row">
+    <span>{{ field.label }}</span>
+    <input type="{{ field.widget_type|default:'text' }}" name="{{ field.html_name }}"
+           value="{% if field.widget_type != 'password' %}{{ field.value|default_if_none:'' }}{% endif %}"
+           {% if field.field.required %}required{% endif %} {% if field.errors %}class="invalid"{% endif %}>
+    {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+</label>

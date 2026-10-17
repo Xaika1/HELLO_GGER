@@ -1,0 +1,12 @@
+{% extends "panel/base.html" %}
+
+{% block panel %}
+<h2>{{ title }}</h2>
+
+<form class="panel-form" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Сохранить</button>
+    <a href="javascript:history.back()">Отмена</a>
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hello Kitty{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="logo" href="{% url 'index' %}">Hello Kitty<img class="logo-bow" src="{% static 'img/bow.svg' %}" alt=""></a>
+        {% with page=request.resolver_match.url_name %}
+        <nav>
+            <a href="{% url 'index' %}" {% if page == 'index' %}class="active"{% endif %}>Главная</a>
+            <a href="{% url 'cart' %}" {% if page == 'cart' %}class="active"{% endif %}>
+                Корзина{% if cart_count %} <span class="badge">{{ cart_count }}</span>{% endif %}
+            </a>
+            {% if user.is_staff %}
+                <a href="{% url 'panel-products' %}" {% if 'panel' in page %}class="active"{% endif %}>Админ-панель</a>
+            {% endif %}
+        </nav>
+        {% endwith %}
+        {% if user.is_authenticated %}
+            <a class="profile-btn" href="{% url 'profile' %}">
+                <span class="avatar avatar-sm">{{ user.first_name|first|default:user.username|first|upper }}</span>
+                Профиль
+            </a>
+        {% else %}
+            <a class="profile-btn" href="{% url 'web-login' %}">Войти</a>
+        {% endif %}
+    </header>
+    <main>
+        {% include "includes/messages.html" %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <img src="{% static 'img/bow.svg' %}" alt="">
+        <span class="footer-logo">Hello Kitty</span>
+        <span>Милые вещи для лучших друзей ♡</span>
+    </footer>
+</body>
+</html>

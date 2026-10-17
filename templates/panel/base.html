@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Админ-панель — Hello Kitty{% endblock %}
+
+{% block content %}
+<div class="section-head"><img class="head-bow" src="{% static 'img/bow.svg' %}" alt=""><h1>Админ-панель</h1></div>
+<p class="tabs">
+    <a href="{% url 'panel-products' %}">Товары</a>
+    <a href="{% url 'panel-users' %}">Пользователи</a>
+</p>
+{% block panel %}{% endblock %}
+{% endblock %}

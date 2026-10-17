@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<form class="search" method="get">
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" name="q" value="{{ query }}" maxlength="100" placeholder="Поиск по названию" aria-label="Поиск по названию">
+    <select name="sort" onchange="this.form.submit()" aria-label="Сортировка">
+        {% for value, label in sorts.items %}
+            <option value="{{ value }}" {% if value == sort %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="search-btn">Найти</button>
+</form>
+
+<div class="showcase">
+    <section>
+        <div class="section-head">
+            <img class="head-bow" src="{% static 'img/bow.svg' %}" alt="">
+            <h1>{% if query %}Поиск: «{{ query }}»{% else %}Все товары{% endif %}</h1>
+            <span class="count">{{ products|length }} шт.</span>
+        </div>
+
+        {% if products %}
+            <ul class="cards">
+                {% for product in products %}
+                    <li class="card">
+                        <div class="thumb">
+                            <img class="thumb-bow" src="{% static 'img/bow.svg' %}" alt="">
+                            <span>{{ product.name|first|upper }}</span>
+                        </div>
+                        <div class="card-body">
+                            <h3>{{ product.name }}</h3>
+                            {% if product.description %}<p>{{ product.description|truncatechars:70 }}</p>{% endif %}
+                            <div class="card-foot">
+                                <span class="price">{{ product.price|floatformat:"-2" }} ₽</span>
+                                {% include "includes/add_to_cart.html" %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                <img src="{% static 'img/kitty.png' %}" alt="">
+                <p>{% if query %}Ничего не нашлось. Попробуйте другое название{% else %}Товаров пока нет{% endif %}</p>
+                {% if query %}<a class="btn" href="{% url 'index' %}">Показать все</a>{% endif %}
+            </div>
+        {% endif %}
+    </section>
+
+    <aside class="mascot">
+        <p class="bubble">Life is better with friends</p>
+        <img src="{% static 'img/kitty.png' %}" alt="Hello Kitty">
+    </aside>
+</div>
+{% endblock %}

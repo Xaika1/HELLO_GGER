@@ -1,0 +1,12 @@
+{% extends "panel/base.html" %}
+
+{% block panel %}
+<h2>Удаление</h2>
+<p>Удалить «{{ object }}»?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn">Удалить</button>
+    <a href="javascript:history.back()">Отмена</a>
+</form>
+{% endblock %}

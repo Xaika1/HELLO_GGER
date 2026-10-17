@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Профиль — Hello Kitty{% endblock %}
+
+{% block content %}
+<div class="profile-card">
+    <div class="avatar-wrap">
+        <span class="avatar avatar-lg">{{ user.first_name|first|default:user.username|first|upper }}</span>
+        <img class="avatar-bow" src="{% static 'img/bow.svg' %}" alt="">
+    </div>
+    <div class="profile-main">
+        <h1>Профиль, {{ user.username }}</h1>
+        <div class="profile-info">
+            <span class="field"><small>Имя</small>{{ user.first_name|default:"—" }}</span>
+            <span class="field"><small>Фамилия</small>{{ user.last_name|default:"—" }}</span>
+            <span class="field"><small>Почта</small>{{ user.email|default:"—" }}</span>
+        </div>
+    </div>
+    <form method="post" action="{% url 'web-logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost">Выйти</button>
+    </form>
+</div>
+
+<section class="orders">
+    <h2><img class="head-bow" src="{% static 'img/bow.svg' %}" alt=""> Мои заказы</h2>
+    <div class="order-list">
+        {% for order in orders %}
+            <article class="order">
+                <div class="order-head">
+                    <h3>Заказ №{{ order.pk }}</h3>
+                    <span class="status status-{{ order.status }}">{{ order.get_status_display }}</span>
+                </div>
+                <p class="order-meta">{{ order.created_at|date:"d.m.Y, H:i" }}</p>
+                <ul>
+                    {% for item in order.items.all %}
+                        <li><span>{{ item.name }} × {{ item.quantity }}</span><span>{{ item.total|floatformat:"-2" }} ₽</span></li>
+                    {% endfor %}
+                </ul>
+                <p class="order-total"><span>Итого</span><strong>{{ order.total|floatformat:"-2" }} ₽</strong></p>
+            </article>
+        {% empty %}
+            <p class="muted">Заказов пока нет — самое время выбрать что-нибудь милое ♡</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

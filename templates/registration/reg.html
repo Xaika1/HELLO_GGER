@@ -1,0 +1,18 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Регистрация — Hello Kitty{% endblock %}
+
+{% block content %}
+<h1>Регистрация</h1>
+
+<form class="auth-form" method="post" novalidate>
+    {% csrf_token %}
+    {% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
+    {% for field in form %}
+        {% include "includes/field.html" %}
+    {% endfor %}
+    <p class="hint">Пароль — минимум 6 символов</p>
+    <button type="submit" class="btn">Зарегистрироваться</button>
+</form>
+<p class="switch">Уже есть аккаунт? <a href="{% url 'web-login' %}">Войти</a></p>
+{% endblock %}

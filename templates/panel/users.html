@@ -1,0 +1,25 @@
+{% extends "panel/base.html" %}
+
+{% block panel %}
+<h2>Пользователи</h2>
+<p><a href="{% url 'panel-user-add' %}">+ Добавить пользователя</a></p>
+
+<div class="table-wrap">
+<table>
+    <tr><th>Логин</th><th>Email</th><th>Имя</th><th>Админ</th><th>Активен</th><th></th></tr>
+    {% for u in object_list %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.get_full_name }}</td>
+            <td>{{ u.is_staff|yesno:"да,нет" }}</td>
+            <td>{{ u.is_active|yesno:"да,нет" }}</td>
+            <td>
+                <a href="{% url 'panel-user-edit' u.pk %}">Изменить</a>
+                {% if u != user %}<a href="{% url 'panel-user-delete' u.pk %}">Удалить</a>{% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
